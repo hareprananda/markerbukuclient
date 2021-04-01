@@ -1,0 +1,36 @@
+.kalimat__formGroup {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  border: 1px solid #707070;
+  border-radius: 30px;
+  height: 100%;
+  margin-bottom: 10px;
+}
+.kalimat__formGroup input,
+.kalimat__formGroup select,
+.kalimat__formGroup textarea {
+  height: 100%;
+  background-color: transparent;
+  border: none;
+  flex: auto;
+  color: white;
+  margin-left: 10px;
+}
+.kalimat__formGroup input:focus,
+.kalimat__formGroup select:focus,
+.kalimat__formGroup textarea:focus {
+  outline: none;
+}
+.kalimat__formGroup input::placeholder,
+.kalimat__formGroup select::placeholder,
+.kalimat__formGroup textarea::placeholder {
+  color: #6e7182;
+}
+.kalimat__formGroup textarea {
+  min-height: 300px !important;
+}
+.kalimat__formGroup select option {
+  background-color: black;
+  color: white;
+}

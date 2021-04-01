@@ -1,0 +1,26 @@
+.home__table {
+  width: 100%;
+}
+.home__table tr .home__table__contentHead {
+  display: flex;
+  align-items: center;
+  font-size: 22px;
+}
+.home__table tr td {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  cursor: pointer;
+}
+.home__table tr .home__table__contentHead .icons {
+  margin-right: 10px;
+}
+.home__table tr img {
+  width: 47px;
+  height: 47px;
+  border-radius: 50%;
+}
+.home__table tbody tr td:nth-child(1),
+.home__table tbody tr td:nth-child(2),
+.home__table tbody tr td:nth-child(4) {
+  color: var(--brown);
+}
