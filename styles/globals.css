@@ -1,3 +1,12 @@
+@import "../component/pages/Header/Header.css";
+@import "./home.css";
+@import "./Utility/modal.css";
+@import "./Utility/Pagination.css";
+@import "./kalimat.css";
+@import "./buku.css";
+*:focus {
+  outline: none;
+}
 :root {
   --primary: #01ca69;
   --primary-light: #b1fed9;
@@ -31,6 +40,9 @@ body {
 .container {
   max-width: 1140px;
   margin: 30px auto 0;
+}
+textarea {
+  resize: none;
 }
 h1,
 h2,
@@ -67,13 +79,11 @@ a {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+.inline {
+  display: inline;
+}
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
 }
-@import "../component/pages/Header/Header.css";
-@import "./home.css";
-@import "./Utility/modal.css";
-@import "./Utility/Pagination.css";
-@import "./kalimat.css";

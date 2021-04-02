@@ -16,6 +16,7 @@
   flex: auto;
   color: white;
   margin-left: 10px;
+  font-family: Arial, Helvetica, sans-serif;
 }
 .kalimat__formGroup input:focus,
 .kalimat__formGroup select:focus,
@@ -33,4 +34,12 @@
 .kalimat__formGroup select option {
   background-color: black;
   color: white;
+}
+.kalimat__container form .submitBtn {
+  margin-left: auto;
+  margin-top: 10px;
+  padding: 8px 15px;
+  font-size: 20px;
+  color: #01cb6a;
+  background-color: #004826;
 }

@@ -1,0 +1,9 @@
+.buku__tambahBuku__btn {
+  margin-left: auto;
+  background-color: #004826;
+  padding: 15px !important;
+}
+.button__row .buku__root {
+  display: flex;
+  justify-content: flex-end;
+}

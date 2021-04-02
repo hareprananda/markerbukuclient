@@ -5,18 +5,14 @@ import TurnedInIcon from "@material-ui/icons/TurnedIn";
 import DateRangeIcon from "@material-ui/icons/DateRange";
 import PersonIcon from "@material-ui/icons/Person";
 import AssignmentIcon from "@material-ui/icons/Assignment";
-import Modal from "@material-ui/core/Modal";
-import DeleteIcon from "@material-ui/icons/Delete";
-import EditIcon from "@material-ui/icons/Edit";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import Pagination from "../component/Utility/Pagination";
+import HomeModal from "../component/Utility/Modal/HomeModal";
 
 const dumDat = {
   buku: "seni negosiasi",
   kalimat: "sesungguhnya manusia itu adalah bodoh",
   halaman: "202",
+  penulis: "benjamin graham",
   updated_at: "2020-09-21 10:00:00",
   oleh: {
     nama: "wayan kaler",
@@ -68,7 +64,10 @@ export default function Home() {
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((value) => (
             <tr onClick={openModalWithData(dumDat)} key={value}>
               <td>{dumDat.buku}</td>
-              <td>{dumDat.kalimat}</td>
+              <td>
+                {dumDat.kalimat.slice(0, 100) +
+                  (dumDat.kalimat.length > 100 ? "..." : "")}
+              </td>
               <td>#{dumDat.halaman}</td>
               <td>{dumDat.updated_at}</td>
               <td>
@@ -81,61 +80,11 @@ export default function Home() {
         </tbody>
       </table>
       <Pagination />
-      <Modal
-        disablePortal
-        disableEnforceFocus
-        disableAutoFocus
-        onClose={() => setOpenModal(false)}
-        open={openModal}
-        aria-labelledby="server-modal-title"
-        aria-describedby="server-modal-description"
-      >
-        <div className="modal__modalRoot">
-          <div
-            className="modal__closeButton"
-            onClick={() => setOpenModal(false)}
-          >
-            <HighlightOffIcon fontSize="inherit" />
-          </div>
-
-          <div className="modal__header modal__header__home">
-            <div className="modal__home__button">
-              <button className="btn btn-red">
-                <DeleteIcon />
-                Hapus
-              </button>
-              <button className="btn btn-blue">
-                <EditIcon />
-                Edit
-              </button>
-            </div>
-
-            <div className="modal__home__nextPrevButton">
-              <button className="previous__button btn">
-                <ChevronLeftIcon color="inherit" /> Previous
-              </button>
-              <button className="next__button btn">
-                Next
-                <ChevronRightIcon color="inherit" />
-              </button>
-            </div>
-          </div>
-          <div className="modal__body modal__home__body">
-            <div className="modal__home__mainInformation">
-              {Object.keys(dataActive).map((data, idx) => (
-                <>
-                  <p>{data}</p>
-                  <p>
-                    {typeof dataActive[data] === "object"
-                      ? dataActive[data].nama
-                      : dataActive[data]}
-                  </p>
-                </>
-              ))}
-            </div>
-          </div>
-        </div>
-      </Modal>
+      <HomeModal
+        dataActive={dataActive}
+        openModal={openModal}
+        modalHandler={setOpenModal}
+      />
     </>
   );
 }

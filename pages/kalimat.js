@@ -2,13 +2,11 @@ import React from "react";
 import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
 import TurnedInIcon from "@material-ui/icons/TurnedIn";
 import AssignmentIcon from "@material-ui/icons/Assignment";
+import AddIcon from "@material-ui/icons/Add";
+import { autoGrow } from "../lib/utility/form";
 const kalimat = () => {
   const submitHandler = (e) => {
     e.preventDefault();
-  };
-  const autoGrow = (e) => {
-    e.target.style.height = "5px";
-    e.target.style.height = e.target.scrollHeight + "px";
   };
   return (
     <div className="kalimat__container">
@@ -29,6 +27,9 @@ const kalimat = () => {
           <AssignmentIcon />
           <textarea placeholder="Kalimat..." onInput={autoGrow} />
         </div>
+        <button className="btn submitBtn">
+          <AddIcon /> Tambah
+        </button>
       </form>
     </div>
   );

@@ -20,7 +20,6 @@
   border-radius: 50%;
 }
 .home__table tbody tr td:nth-child(1),
-.home__table tbody tr td:nth-child(2),
 .home__table tbody tr td:nth-child(4) {
   color: var(--brown);
 }
