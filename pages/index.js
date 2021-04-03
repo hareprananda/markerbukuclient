@@ -1,5 +1,5 @@
 import Head from "next/head";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
 import TurnedInIcon from "@material-ui/icons/TurnedIn";
 import DateRangeIcon from "@material-ui/icons/DateRange";
@@ -28,6 +28,16 @@ export default function Home() {
     setOpenModal(true);
     setDataActive(data);
   };
+  useEffect(() => {
+    (async () => {
+      fetch(`${process.env.SERVER__NODE_ENDPOINT}/buku`, {
+        method: "get",
+      })
+        .then((response) => response.json())
+        .then((data) => console.log(data))
+        .catch((err) => console.log(err));
+    })();
+  }, []);
   return (
     <>
       <table className="home__table">
