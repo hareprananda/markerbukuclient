@@ -10,7 +10,10 @@ const Pagination = ({ lastPage = 15, currentPage = 1 }) => {
       </div>
 
       {[1, 2, 3, "...", 1500].map((value) => (
-        <div className={`pagination__button ${value == 1 ? "active" : ""}`}>
+        <div
+          className={`pagination__button ${value == 1 ? "active" : ""}`}
+          key={value}
+        >
           <span>{value}</span>
         </div>
       ))}

@@ -14,34 +14,48 @@ import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import Pagination from "../component/Utility/Pagination";
 import ConfirmationModal from "../component/Utility/Modal/ConfirmationModal";
 import EditBukuModal from "../component/Utility/Modal/EditBukuModal";
+import { requestBuku } from "../lib/http/api";
 
-const dumDat = {
-  judul: "seni negosiasi",
-  penulis: "Warren Buffet",
-  halaman: "202",
-  updated_at: "2020-09-21 10:00:00",
-  oleh: {
-    nama: "wayan kaler",
-    photo: "nophoto.jpg",
-  },
-};
-export default function buku() {
+const buku = ({ dataBuku }) => {
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-  const [dataActive, setDataActive] = useState({});
+
   const [showEditModal, setShowEditModal] = useState(false);
   const [dataModal, setDataModal] = useState(false);
+  const [listBuku, setListBuku] = useState(dataBuku ?? []);
+  const [deletePointer, setDeletePointer] = useState("");
 
   const [confirmationModalText, setConfirmationModalText] = useState("");
 
+  useEffect(() => {
+    if (dataBuku) return;
+
+    (async () => setListBuku(await requestBuku()))();
+  }, []);
   const confirmationModalHandler = (data) => () => {
     setConfirmationModalText(
       `Apakah anda yakin ingin menghapus ${data.judul} dan segala kalimat kutipannya ?`
     );
     setShowConfirmationModal(true);
+    setDeletePointer(data._id);
   };
   const openModal = (data) => () => {
     setShowEditModal(true);
     setDataModal(data);
+  };
+
+  const deleteBuku = (id) => async (e) => {
+    const deleteBuku = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER__NODE_ENDPOINT}/buku/${id}`,
+      {
+        method: "delete",
+      }
+    ).then((response) => response.json());
+
+    if (!deleteBuku) alert("Gagal terhapus");
+
+    setListBuku((current) =>
+      current.filter((buku) => buku._id !== deletePointer)
+    );
   };
   return (
     <div className="buku__root">
@@ -74,26 +88,26 @@ export default function buku() {
           </tr>
         </thead>
         <tbody>
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((value) => (
-            <tr key={value}>
-              <td>{dumDat.judul}</td>
-              <td>{dumDat.penulis}</td>
-              <td>{dumDat.updated_at}</td>
+          {listBuku.map((buku, idxBuku) => (
+            <tr key={buku._id}>
+              <td>{buku.judul}</td>
+              <td>{buku.penulis}</td>
+              <td>{buku.updatedAt}</td>
               <td>
                 <img
-                  src={`${process.env.SERVER__NODE_ENDPOINT}/image/${dumDat.oleh.photo}`}
+                  src={`${process.env.NEXT_PUBLIC_SERVER__NODE_ENDPOINT}/image/${buku.penambah.photo}`}
                 />
               </td>
               <td>
                 <div className="button__row">
                   <button
                     className="btn inline btn-red"
-                    onClick={confirmationModalHandler(dumDat)}
+                    onClick={confirmationModalHandler(buku)}
                   >
                     <DeleteIcon />
                   </button>
                   <button
-                    onClick={openModal(dumDat)}
+                    onClick={openModal(buku)}
                     className="btn inline btn-blue"
                     style={{ marginLeft: "7px" }}
                   >
@@ -105,18 +119,27 @@ export default function buku() {
           ))}
         </tbody>
       </table>
-      <Pagination />
       <ConfirmationModal
         showModal={showConfirmationModal}
         modalHandler={setShowConfirmationModal}
         text={confirmationModalText}
-        confirmedHandler={() => alert("sukses terhapus")}
+        confirmedHandler={deleteBuku(deletePointer)}
       />
       <EditBukuModal
         showModal={showEditModal}
         modalHandler={setShowEditModal}
         data={dataModal}
+        setListBuku={setListBuku}
       />
     </div>
   );
-}
+};
+
+buku.getInitialProps = async (ctx) => {
+  if (process.browser) return __NEXT_DATA__.props.pageProps;
+
+  return {
+    dataBuku: await requestBuku(),
+  };
+};
+export default buku;

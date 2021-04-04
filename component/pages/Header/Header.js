@@ -5,8 +5,9 @@ const Header = () => {
   const router = useRouter();
 
   useEffect(() => {
+    if (document === "undefined") return;
     let { pathname } = router;
-    pathname = pathname.replace("/", "");
+    pathname = pathname.split("/")[1];
     const allMenuEl = document.querySelectorAll(".headerContainer__menu");
     [...allMenuEl].forEach((menuEl) => menuEl.classList.remove("active"));
     document.querySelector(`#${pathname}__headerMenu`).classList.add("active");

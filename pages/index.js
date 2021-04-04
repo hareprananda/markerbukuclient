@@ -7,37 +7,43 @@ import PersonIcon from "@material-ui/icons/Person";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import Pagination from "../component/Utility/Pagination";
 import HomeModal from "../component/Utility/Modal/HomeModal";
+import { requestSummary } from "../lib/http/api";
 
-const dumDat = {
-  buku: "seni negosiasi",
-  kalimat: "sesungguhnya manusia itu adalah bodoh",
-  halaman: "202",
-  penulis: "benjamin graham",
-  updated_at: "2020-09-21 10:00:00",
-  oleh: {
-    nama: "wayan kaler",
-    photo: "nophoto.jpg",
-  },
-};
-export default function Home() {
+function Home({ data, context }) {
   const [openModal, setOpenModal] = useState(false);
+  const [summaryData, setSummaryData] = useState(data);
   const [dataActive, setDataActive] = useState({});
   const openModalWithData = (data) => (e) => {
-    console.log(data);
-
     setOpenModal(true);
     setDataActive(data);
   };
   useEffect(() => {
-    (async () => {
-      fetch(`${process.env.SERVER__NODE_ENDPOINT}/buku`, {
-        method: "get",
-      })
-        .then((response) => response.json())
-        .then((data) => console.log(data))
-        .catch((err) => console.log(err));
-    })();
+    if (data.length > 0) return;
+
+    (async () => setSummaryData(await requestSummary()))();
   }, []);
+  const changeDataActiveIndex = {
+    next() {
+      setDataActive((current) => {
+        let index = summaryData.findIndex((dat) => dat == current);
+
+        if (summaryData[index + 1]) {
+          return summaryData[index + 1];
+        }
+        return current;
+      });
+    },
+    previous() {
+      setDataActive((current) => {
+        let index = summaryData.findIndex((dat) => dat == current);
+
+        if (index - 1 >= 0 && summaryData[index - 1]) {
+          return summaryData[index - 1];
+        }
+        return current;
+      });
+    },
+  };
   return (
     <>
       <table className="home__table">
@@ -71,30 +77,39 @@ export default function Home() {
           </tr>
         </thead>
         <tbody>
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((value) => (
-            <tr onClick={openModalWithData(dumDat)} key={value}>
-              <td>{dumDat.buku}</td>
+          {summaryData.map((dataSummary, idxSum) => (
+            <tr onClick={openModalWithData(dataSummary)} key={idxSum}>
+              <td>{dataSummary.judul}</td>
               <td>
-                {dumDat.kalimat.slice(0, 100) +
-                  (dumDat.kalimat.length > 100 ? "..." : "")}
+                {dataSummary.kalimat.slice(0, 100) +
+                  (dataSummary.kalimat.length > 100 ? "..." : "")}
               </td>
-              <td>#{dumDat.halaman}</td>
-              <td>{dumDat.updated_at}</td>
+              <td>#{dataSummary.halaman}</td>
+              <td>{dataSummary.updatedAt}</td>
               <td>
                 <img
-                  src={`${process.env.SERVER__NODE_ENDPOINT}/image/${dumDat.oleh.photo}`}
+                  src={`${process.env.NEXT_PUBLIC_SERVER__NODE_ENDPOINT}/image/${dataSummary.photo}`}
                 />
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <Pagination />
       <HomeModal
+        changeActive={changeDataActiveIndex}
         dataActive={dataActive}
         openModal={openModal}
         modalHandler={setOpenModal}
+        setSummaryData={setSummaryData}
       />
     </>
   );
 }
+Home.getInitialProps = async (ctx) => {
+  if (!ctx.req) return { data: [] };
+  return {
+    data: await requestSummary(),
+  };
+};
+
+export default Home;
